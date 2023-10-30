@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".EditActivity">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingHorizontal="20dp">
+
+        <ImageView
+            android:id="@+id/back_iv"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginTop="35dp"
+            android:src="@drawable/back_btn"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/title_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="3dp"
+            android:layout_marginTop="25dp"
+            android:text="내 정보 수정"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/back_iv" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profileImage_iv"
+            android:layout_width="94dp"
+            android:layout_height="94dp"
+            android:layout_marginTop="35dp"
+            android:src="#D9D9D9"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/title_tv" />
+
+        <TextView
+            android:id="@+id/nickname_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="18dp"
+            android:text="박지원"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profileImage_iv" />
+
+        <TextView
+            android:id="@+id/email_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="11dp"
+            android:text="ji11won@naver.com"
+            android:textColor="#CBC7C7"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nickname_tv" />
+
+        <TextView
+            android:id="@+id/editContent_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="47dp"
+            android:text="수정할 내용"
+            android:textColor="#000000"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/nickname_tv" />
+
+        <TextView
+            android:id="@+id/nicknameInput_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="39dp"
+            android:text="닉네임"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@id/editContent_tv"
+            app:layout_constraintTop_toBottomOf="@id/editContent_tv" />
+
+        <EditText
+            android:id="@+id/nicknameInput_et"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="48dp"
+            app:layout_constraintBottom_toBottomOf="@id/nicknameInput_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/nicknameInput_tv"
+            app:layout_constraintTop_toTopOf="@id/nicknameInput_tv" />
+
+        <TextView
+            android:id="@+id/profileImageInput_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="39dp"
+            android:text="프로필 사진"
+            android:textColor="#000000"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="@id/editContent_tv"
+            app:layout_constraintTop_toBottomOf="@id/nicknameInput_tv" />
+
+        <Button
+            android:id="@+id/profileImageInput_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="#FDECEC"
+            android:text="선택하기"
+            android:textColor="#17171796"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="@id/profileImageInput_tv"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/profileImageInput_tv"
+            app:layout_constraintTop_toTopOf="@id/profileImageInput_tv" />
+
+        <Button
+            android:id="@+id/store_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="140dp"
+            android:backgroundTint="#FDECEC"
+            android:text="저장하기"
+            android:textColor="#17171796"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/profileImageInput_tv" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
