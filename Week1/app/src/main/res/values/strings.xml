@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Week1</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="title_todo">지원의 투두리스트</string>
+    <string name="my_title">마이페이지</string>
+    <string name="my_my_record">나의 기록</string>
+    <string name="my_alarm">최근알림</string>
+    <string name="my_edit">내 정보 수정</string>
+    <string name="my_notification">공지사항</string>
+    <string name="my_version">버전</string>
+    <string name="my_logout">로그아웃</string>
+    <string name="my_withdrawal">회원탈퇴</string>
+    <string name="my_done_todo">완료 투두 :</string>
 </resources>
