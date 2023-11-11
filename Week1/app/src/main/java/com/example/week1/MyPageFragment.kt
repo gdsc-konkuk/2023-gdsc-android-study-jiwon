@@ -13,7 +13,7 @@ class MyPageFragment : Fragment() {
 
     private var _binding: FragmentMyPageBinding? = null
     private val binding
-        get() = _binding!!
+        get() = requireNotNull(_binding) { "MyPageFragment's binding is null" }
 
     /* MainActivity 코드 이전
     val startForResult = registerForActivityResult(
@@ -28,27 +28,26 @@ class MyPageFragment : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentMyPageBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         binding.editMyProfileIv.setOnClickListener {
-            val intent: Intent = Intent(requireActivity(), EditActivity::class.java)
+            val intent: Intent = Intent(requireContext(), EditActivity::class.java)
             intent.putExtra("nickname", binding.nicknameTv.text)
             intent.putExtra("email", binding.emailTv.text)
 //            startForResult.launch(intent)
             startActivity(intent)
         }
-
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         _binding = null
+        super.onDestroyView()
     }
 
 }
