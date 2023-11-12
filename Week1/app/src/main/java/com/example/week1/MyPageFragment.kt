@@ -13,6 +13,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.example.week1.databinding.FragmentMyPageBinding
 import com.example.week1.viewModel.NameViewModel
+import com.example.week1.viewModel.ToDoViewModel
 
 class MyPageFragment : Fragment() {
 
@@ -20,7 +21,7 @@ class MyPageFragment : Fragment() {
     private val binding
         get() = requireNotNull(_binding) { "MyPageFragment's binding is null" }
 
-    /* MainActivity 코드 이전
+    private val todoViewModel: ToDoViewModel by activityViewModels()
     private val nameViewModel: NameViewModel by activityViewModels()
 
 //     MainActivity 코드 이전
@@ -63,6 +64,11 @@ class MyPageFragment : Fragment() {
             binding.nicknameTv.text = it
         }
         nameViewModel.currentName.observe(viewLifecycleOwner, nameObserver)
+
+        val countObserver = Observer<List<ToDoData>> {
+            binding.tvTodoCount.text = "${todoViewModel.getDoneCount()} 개"
+        }
+        todoViewModel.currentToDoList.observe(viewLifecycleOwner, countObserver)
     }
 
     override fun onDestroyView() {

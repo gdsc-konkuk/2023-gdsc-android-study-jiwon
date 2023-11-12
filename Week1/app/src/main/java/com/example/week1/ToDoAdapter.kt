@@ -10,7 +10,7 @@ class ToDoAdapter(private val itemList: List<ToDoData>): RecyclerView.Adapter<To
     class ToDoViewHolder(val binding: ItemTodoBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(item: ToDoData) {
             binding.tvContent.text = item.content
-            binding.ivCheck.isSelected = item.done
+            binding.ivCheck.isChecked = item.done
         }
     }
 
@@ -28,8 +28,8 @@ class ToDoAdapter(private val itemList: List<ToDoData>): RecyclerView.Adapter<To
         val binding = holder.binding
         val data = itemList[position]
 
-        binding.ivCheck.setOnClickListener {
-            data.done = !data.done
+        binding.ivCheck.setOnCheckedChangeListener { buttonView, isChecked ->
+            data.done = isChecked
         }
     }
 }
