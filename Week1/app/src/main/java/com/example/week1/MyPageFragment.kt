@@ -1,13 +1,18 @@
 package com.example.week1
 
+import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.week1.databinding.FragmentHomeBinding
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import com.example.week1.databinding.FragmentMyPageBinding
+import com.example.week1.viewModel.NameViewModel
 
 class MyPageFragment : Fragment() {
 
@@ -16,13 +21,19 @@ class MyPageFragment : Fragment() {
         get() = requireNotNull(_binding) { "MyPageFragment's binding is null" }
 
     /* MainActivity 코드 이전
+    private val nameViewModel: NameViewModel by activityViewModels()
+
+//     MainActivity 코드 이전
     val startForResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
-            binding.nicknameTv.text = result.data?.getStringExtra("nickname")
+            result.data?.getStringExtra("nickname").also {
+                binding.nicknameTv.text = it
+                nameViewModel.setName(it.toString())
+            }
         }
-    }*/
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -36,13 +47,22 @@ class MyPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setObserver()
+
         binding.editMyProfileIv.setOnClickListener {
             val intent: Intent = Intent(requireContext(), EditActivity::class.java)
             intent.putExtra("nickname", binding.nicknameTv.text)
             intent.putExtra("email", binding.emailTv.text)
-//            startForResult.launch(intent)
-            startActivity(intent)
+            startForResult.launch(intent)
         }
+    }
+
+    private fun setObserver() {
+
+        val nameObserver = Observer<String> {
+            binding.nicknameTv.text = it
+        }
+        nameViewModel.currentName.observe(viewLifecycleOwner, nameObserver)
     }
 
     override fun onDestroyView() {
