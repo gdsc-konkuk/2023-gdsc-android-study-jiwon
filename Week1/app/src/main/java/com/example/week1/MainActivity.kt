@@ -9,18 +9,16 @@ import com.example.week1.databinding.ActivityMainBinding
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private val fragmentManager by lazy { supportFragmentManager }
-    private val fragmentTransaction by lazy { fragmentManager.beginTransaction() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        replaceFragment(fragmentTransaction, HomeFragment())
+        replaceFragment(supportFragmentManager.beginTransaction(), HomeFragment())
 
         binding.bnvBnv.setOnItemSelectedListener {
-            val fragmentTransaction = fragmentManager.beginTransaction()
+            val fragmentTransaction = supportFragmentManager.beginTransaction()
             when (it.itemId) {
                 R.id.item_home -> {
                     replaceFragment(fragmentTransaction, HomeFragment())
@@ -40,7 +38,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.ibtnTodoPlus.setOnClickListener {
-            val fragmentTransaction = fragmentManager.beginTransaction()
+            val fragmentTransaction = supportFragmentManager.beginTransaction()
             replaceFragment(fragmentTransaction, CreateFragment())
         }
     }

@@ -12,22 +12,18 @@ class CreateFragment : Fragment() {
 
     private var _binding: FragmentCreateBinding? = null
     private val binding
-        get() = _binding!!
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
+        get() = requireNotNull(_binding) { "CreateFragment's binding is null" }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentCreateBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onDestroyView() {
-        super.onDestroyView()
         _binding = null
+        super.onDestroyView()
     }
 }

@@ -6,7 +6,15 @@
     android:background="@color/white"
     android:paddingBottom="20dp">
 
-    <ImageView
+    <!--<ImageView
+        android:id="@+id/iv_check"
+        android:layout_width="23dp"
+        android:layout_height="23dp"
+        android:src="@drawable/selector_todo_done"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <CheckBox
         android:id="@+id/iv_check"
         android:layout_width="23dp"
         android:layout_height="23dp"
