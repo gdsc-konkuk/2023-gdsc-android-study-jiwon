@@ -55,4 +55,8 @@ dependencies {
     val viewmodel_version = "1.6.2"
     implementation("androidx.fragment:fragment-ktx:${viewmodel_version}")
 
+    val retrofit_version = "2.9.0"
+    implementation("com.squareup.retrofit2:retrofit:${retrofit_version}")
+    implementation("com.squareup.retrofit2:converter-gson:${retrofit_version}")
+
 }
