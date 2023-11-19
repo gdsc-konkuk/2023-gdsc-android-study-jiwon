@@ -63,4 +63,7 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp:${okhttp3_version}")
     implementation("com.squareup.okhttp3:logging-interceptor:${okhttp3_version}")
 
+    val glide_version = "4.16.0"
+    implementation("com.github.bumptech.glide:glide:${glide_version}")
+
 }
