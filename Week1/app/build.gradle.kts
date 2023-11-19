@@ -59,4 +59,8 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:${retrofit_version}")
     implementation("com.squareup.retrofit2:converter-gson:${retrofit_version}")
 
+    val okhttp3_version = "4.11.0"
+    implementation("com.squareup.okhttp3:okhttp:${okhttp3_version}")
+    implementation("com.squareup.okhttp3:logging-interceptor:${okhttp3_version}")
+
 }
