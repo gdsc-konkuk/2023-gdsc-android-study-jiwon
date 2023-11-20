@@ -6,10 +6,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.example.week1.databinding.ActivityEditBinding
-import com.example.week1.viewModel.NameViewModel
+import com.example.week1.network.ResultPhotosRamdom
+import com.example.week1.network.RetrofitUtil
+import com.example.week1.network.UnsplashService.Companion.TAG
+import retrofit2.Call
+import retrofit2.Response
 
 class EditActivity : AppCompatActivity() {
 
@@ -19,6 +22,8 @@ class EditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        var url: String? = null
 
         intent.getStringExtra("nickname").also { name ->
             binding.nicknameTv.text = name
@@ -36,8 +41,12 @@ class EditActivity : AppCompatActivity() {
                 Toast.makeText(this, "닉네임은 빈칸일 수 없습니다.", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
+
+            val imageUrl = requireNotNull(url) { "EditActivity's imageUrl is null" }
+
             val resultIntent: Intent = Intent(this, MainActivity::class.java).apply {
                 putExtra("nickname", binding.nicknameInputEt.text.toString())
+                putExtra("imageUrl", imageUrl)
             }
             setResult(Activity.RESULT_OK, resultIntent)
             finish()
@@ -48,6 +57,34 @@ class EditActivity : AppCompatActivity() {
                  binding.nicknameInputEt.setText("")
              }
          }
+
+        binding.profileImageInputBtn.setOnClickListener {
+            RetrofitUtil.unsplashService.requestRandomPhoto().enqueue(object : retrofit2.Callback<ResultPhotosRamdom> {
+                override fun onResponse(
+                    call: Call<ResultPhotosRamdom>,
+                    response: Response<ResultPhotosRamdom>
+                ) {
+                    if (response.isSuccessful) {
+                        Log.d(TAG, "EditActivity - onResponse() called: 성공")
+                        val body = requireNotNull(response.body()) { "Retrofit-requestRandomPhoto()'s result is null" }
+                        url = body.urls.url
+
+                        Glide.with(this@EditActivity)
+                            .load(url)
+                            .centerCrop()
+                            .into(binding.profileImageIv)
+
+                        return
+                    }
+                    Log.d(TAG, "EditActivity - onResponse() called: 실패")
+                }
+
+                override fun onFailure(call: Call<ResultPhotosRamdom>, t: Throwable) {
+                    Log.d(TAG, "EditActivity - onFailure() called")
+                }
+
+            })
+        }
 
     }
 }
