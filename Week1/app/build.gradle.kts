@@ -1,6 +1,7 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -66,4 +67,8 @@ dependencies {
     val glide_version = "4.16.0"
     implementation("com.github.bumptech.glide:glide:${glide_version}")
 
+    val room_version = "2.5.0"
+    implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
 }
