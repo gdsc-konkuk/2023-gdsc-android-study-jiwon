@@ -1,8 +1,10 @@
 package com.example.week1
 
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,9 +13,15 @@ import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import com.bumptech.glide.Glide
 import com.example.week1.databinding.FragmentMyPageBinding
+import com.example.week1.db.User
+import com.example.week1.db.UserDao
+import com.example.week1.db.UserRoomDatabase
+import com.example.week1.utils.TAG
 import com.example.week1.viewModel.NameViewModel
 import com.example.week1.viewModel.ToDoViewModel
+import com.example.week1.viewModel.UserViewModel
 
 class MyPageFragment : Fragment() {
 
@@ -21,18 +29,32 @@ class MyPageFragment : Fragment() {
     private val binding
         get() = requireNotNull(_binding) { "MyPageFragment's binding is null" }
 
+    private val userDao: UserDao by lazy { UserRoomDatabase.getDatabase(requireContext()).userDao() }
     private val todoViewModel: ToDoViewModel by activityViewModels()
-    private val nameViewModel: NameViewModel by activityViewModels()
+//    private val nameViewModel: NameViewModel by activityViewModels()
+    private val userViewModel: UserViewModel by activityViewModels()
 
-//     MainActivity 코드 이전
-    val startForResult = registerForActivityResult(
+    private val startForResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == RESULT_OK) {
-            result.data?.getStringExtra("nickname").also {
+            /*result.data?.getStringExtra("nickname").also {
                 binding.nicknameTv.text = it
-                nameViewModel.setName(it.toString())
+//                nameViewModel.setName(it.toString())
             }
+            result.data?.getStringExtra("imageUrl").also {
+                Glide.with(requireContext())
+                    .load(it)
+                    .centerCrop()
+                    .into(binding.profileImageIv)
+//                nameViewModel.setImage(it.toString())
+            }*/
+
+            val name = requireNotNull(result.data?.getStringExtra("nickname"))
+            val imageUrl = requireNotNull(result.data?.getStringExtra("imageUrl"))
+            val user = User(uid = 1, name = name, imageUrl = imageUrl)
+            userViewModel.setUser(user)
+            userDao.updateUser(user)
         }
     }
 
@@ -50,6 +72,8 @@ class MyPageFragment : Fragment() {
 
         setObserver()
 
+        setProfile()
+
         binding.editMyProfileIv.setOnClickListener {
             val intent: Intent = Intent(requireContext(), EditActivity::class.java)
             intent.putExtra("nickname", binding.nicknameTv.text)
@@ -58,12 +82,35 @@ class MyPageFragment : Fragment() {
         }
     }
 
+    private fun setProfile() {
+        val data = userDao.getAll()
+        userViewModel.setUser(data[0])
+    }
+
     private fun setObserver() {
 
-        val nameObserver = Observer<String> {
+        /*val nameObserver = Observer<String> {
             binding.nicknameTv.text = it
         }
         nameViewModel.currentName.observe(viewLifecycleOwner, nameObserver)
+
+        val imageObserver = Observer<String> {
+            Glide.with(requireContext())
+                .load(it)
+                .centerCrop()
+                .into(binding.profileImageIv)
+        }
+        nameViewModel.currentImage.observe(viewLifecycleOwner, imageObserver)*/
+
+        val userObserver = Observer<User> {
+            binding.nicknameTv.text = it.name
+            Glide.with(requireContext())
+                .load(it.imageUrl)
+                .centerCrop()
+                .into(binding.profileImageIv)
+            userDao.updateUser(it)
+        }
+        userViewModel.currentUser.observe(viewLifecycleOwner, userObserver)
 
         val countObserver = Observer<List<ToDoData>> {
             binding.tvTodoCount.text = "${todoViewModel.getDoneCount()} 개"
