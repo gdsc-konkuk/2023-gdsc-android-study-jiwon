@@ -1,34 +1,36 @@
 package com.example.week1.db
 
+import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao {
 
     @Query("SELECT * FROM users")
-    fun getAll(): List<User>
+    fun getAll(): Flow<List<User>>
 
-    @Query("SELECT * FROM users " +
+    /*@Query("SELECT * FROM users " +
             "WHERE name LIKE :name " +
             "LIMIT 1")
-    fun findByName(name: String): User
+    fun findByName(name: String): LiveData<User>*/
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertUser(user: User)
+    suspend fun insertUser(user: User)
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insertAll(vararg user: User)
+    suspend fun insertAll(vararg user: User)
 
     @Update
-    fun updateUser(user: User)
+    suspend fun updateUser(user: User)
 
     @Delete
-    fun delete(user: User)
+    suspend fun delete(user: User)
 
     /*@Query("SELECT * from users WHERE uid = :id")
     fun getItem(id: Int): Flow<User>
