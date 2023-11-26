@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 interface UserDao {
 
     @Query("SELECT * FROM users")
-    fun getAll(): Flow<List<User>>
+    fun getAll(): LiveData<List<User>>
 
     /*@Query("SELECT * FROM users " +
             "WHERE name LIKE :name " +
@@ -31,10 +31,4 @@ interface UserDao {
 
     @Delete
     suspend fun delete(user: User)
-
-    /*@Query("SELECT * from users WHERE uid = :id")
-    fun getItem(id: Int): Flow<User>
-
-    @Query("SELECT * from users ORDER BY name ASC")
-    fun getItems(): Flow<List<User>>*/
 }
