@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.week1.utils.TAG
 import com.example.week1.databinding.FragmentHomeBinding
@@ -33,6 +34,11 @@ class HomeFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.rvTodoList.adapter = ToDoAdapter(todoViewModel.currentToDoList.value!!)
         binding.rvTodoList.layoutManager = LinearLayoutManager(context)
+
+        val todoObserver = Observer<List<ToDoData>> {
+            binding.rvTodoList.adapter = ToDoAdapter(todoViewModel.currentToDoList.value!!)
+        }
+        todoViewModel.currentToDoList.observe(viewLifecycleOwner, todoObserver)
     }
 
 

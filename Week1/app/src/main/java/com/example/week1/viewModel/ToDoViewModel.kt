@@ -33,6 +33,13 @@ class ToDoViewModel : ViewModel() {
         return currentToDoList.value!!
     }
 
+    fun addNewTodo(todo: ToDoData) {
+        val newList = mutableListOf<ToDoData>()
+        newList.addAll(requireNotNull(_currentToDoList.value))
+        newList.add(todo)
+        _currentToDoList.value = newList
+    }
+
     private fun loadData(): List<ToDoData> {
         return listOf(
             ToDoData(false, "안녕하세요", "0"),
