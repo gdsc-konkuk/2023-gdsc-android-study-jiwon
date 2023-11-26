@@ -1,14 +1,12 @@
 package com.example.week1
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.week1.utils.TAG
 import com.example.week1.databinding.FragmentHomeBinding
 import com.example.week1.viewModel.ToDoViewModel
 
@@ -39,7 +37,6 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
-        Log.d(TAG, "HomeFragment - onDestroyView() called")
     }
 
 }

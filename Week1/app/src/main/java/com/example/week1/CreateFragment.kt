@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.week1.databinding.FragmentCreateBinding
-import com.example.week1.databinding.FragmentHomeBinding
 
 class CreateFragment : Fragment() {
 
