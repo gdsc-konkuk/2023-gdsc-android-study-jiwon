@@ -1,3 +1,4 @@
+/*
 package com.example.week1.viewModel
 
 import androidx.lifecycle.LiveData
@@ -18,3 +19,4 @@ class UserViewModel: ViewModel() {
         _currentUser.value = user
     }
 }
+*/

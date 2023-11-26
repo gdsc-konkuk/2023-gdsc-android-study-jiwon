@@ -1,3 +1,4 @@
+/*
 package com.example.week1.viewModel
 
 import androidx.lifecycle.LiveData
@@ -27,4 +28,4 @@ class NameViewModel: ViewModel() {
     fun setImage(newImage: String) {
         _currentImage.value = newImage
     }
-}
+}*/

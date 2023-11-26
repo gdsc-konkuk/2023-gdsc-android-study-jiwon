@@ -13,7 +13,7 @@ import kotlinx.coroutines.flow.Flow
 interface UserDao {
 
     @Query("SELECT * FROM users")
-    fun getAll(): Flow<List<User>>
+    fun getAll(): LiveData<List<User>>
 
     /*@Query("SELECT * FROM users " +
             "WHERE name LIKE :name " +
