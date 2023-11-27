@@ -6,8 +6,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.example.week1.databinding.ActivityMainBinding
-import com.example.week1.db.User
-import com.example.week1.db.UserRoomDatabase
 
 class MainActivity : AppCompatActivity(), ExitDialog.ExitInterface {
 
@@ -27,9 +25,6 @@ class MainActivity : AppCompatActivity(), ExitDialog.ExitInterface {
         setContentView(binding.root)
 
         this.onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
-
-        val userDatabase = UserRoomDatabase.getDatabase(this)
-        initDatabase(userDatabase)
 
         replaceFragment(supportFragmentManager.beginTransaction(), HomeFragment())
 
@@ -59,15 +54,6 @@ class MainActivity : AppCompatActivity(), ExitDialog.ExitInterface {
             val createTodoBottomSheet = CreateFragment()
             createTodoBottomSheet.show(supportFragmentManager, CreateFragment.TAG)
         }
-    }
-
-    private fun initDatabase(userDatabase: UserRoomDatabase) {
-        val userDao = userDatabase.userDao()
-        val users = userDao.getAll()
-        if (!users.isNullOrEmpty()) return
-        userDao.insertUser(
-            User(name = "박지원", imageUrl = "https://images.unsplash.com/photo-1691425266385-31dfd2603cca?ixid=M3w0MTIxNzd8MHwxfHJhbmRvbXx8fHx8fHx8fDE3MDA0MjgzNDN8&ixlib=rb-4.0.3")
-        )
     }
 
     private fun replaceFragment(fragmentTransaction: FragmentTransaction, fragment: Fragment) {
