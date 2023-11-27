@@ -40,13 +40,22 @@ class TodoViewModel(
         return true
     }
 
+    fun getDoneCount(): Int {
+        var count = 0
+        for (todo in requireNotNull(currentTodoList.value) { "ToDoViewModel's _currentToDoList is null" }) {
+            if(todo.isDone) count++
+        }
+
+        return count
+    }
+
 }
 
 class TodoViewModelFactory(
     private val todoDao: TodoDao
 ): ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(UserViewModel::class.java)) {
+        if (modelClass.isAssignableFrom(TodoViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
             return TodoViewModel(todoDao) as T
         }
