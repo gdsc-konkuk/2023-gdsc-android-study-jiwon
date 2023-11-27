@@ -1,6 +1,7 @@
 package com.example.week1
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,18 +30,17 @@ class CreateFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnStore.setOnClickListener {
-            if (validateTodo(binding.etTodoContent.toString())) {
+            if (validateTodo(binding.etTodoContent.text.toString())) {
                 val newTodo = ToDoData(false, binding.etTodoContent.text.toString(), "0")
                 toDoViewModel.addNewTodo(newTodo)
-//                내려가기
-                this.dismiss()
-
             }
+            dismiss()
         }
     }
 
     private fun validateTodo(content: String): Boolean {
-        if (content.isEmpty()) {
+        Log.d("로그", "CreateFragment - validateTodo() called\nContent : ${content}\nLength : ${content.length}")
+        if (content.isBlank()) {
             return false
         }
         return true
