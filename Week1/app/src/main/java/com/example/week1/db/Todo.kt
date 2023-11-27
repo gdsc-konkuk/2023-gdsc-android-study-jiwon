@@ -9,7 +9,7 @@ data class Todo(
     @PrimaryKey(autoGenerate = true)
     val uid: Int = 0,
     @ColumnInfo("is_done")
-    val isDone: Boolean,
+    var isDone: Boolean,
     @ColumnInfo("content")
     val content: String,
     @ColumnInfo("created_at")
