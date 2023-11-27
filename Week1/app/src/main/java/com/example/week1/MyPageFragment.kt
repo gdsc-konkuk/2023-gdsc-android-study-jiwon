@@ -15,6 +15,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.week1.databinding.FragmentMyPageBinding
+import com.example.week1.db.TodoViewModel
+import com.example.week1.db.TodoViewModelFactory
 import com.example.week1.db.UserViewModel
 import com.example.week1.db.UserViewModelFactory
 import com.example.week1.db.User
@@ -34,6 +36,7 @@ class MyPageFragment : Fragment() {
                 .userDao()
         )
     }*/
+//    private lateinit var todoViewModel: TodoViewModel
 
     private val startForResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -64,6 +67,10 @@ class MyPageFragment : Fragment() {
             (requireActivity().application as Application).database
                 .userDao()
         ))[UserViewModel::class.java]
+//        todoViewModel = ViewModelProvider(this, TodoViewModelFactory(
+//            (requireActivity().application as Application).database
+//                .todoDao()
+//        ))[TodoViewModel::class.java]
 
         setObserver()
 
@@ -86,7 +93,7 @@ class MyPageFragment : Fragment() {
     private fun setObserver() {
         val usersObserver = Observer<List<User>> {
             if (it != null) {
-                Log.e(TAG ,it.toString())
+                Log.e(TAG, "MyPageFragment - setObserver()\nit = ${it}")
                 setProfile(it)
             } else {
                 // users가 null인 경우 처리 코드
