@@ -4,18 +4,21 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.week1.databinding.ItemTodoBinding
+import com.example.week1.db.Todo
 
-class ToDoAdapter(private val itemList: List<ToDoData>): RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder>() {
+class ToDoAdapter(private val itemList: List<Todo>, private val todo: TodoInterface) :
+    RecyclerView.Adapter<ToDoAdapter.ToDoViewHolder>() {
 
-    class ToDoViewHolder(val binding: ItemTodoBinding): RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: ToDoData) {
+    class ToDoViewHolder(val binding: ItemTodoBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bind(item: Todo) {
             binding.tvContent.text = item.content
-            binding.ivCheck.isChecked = item.done
+            binding.ivCheck.isChecked = item.isDone
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ToDoViewHolder {
-        val binding: ItemTodoBinding = ItemTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding: ItemTodoBinding =
+            ItemTodoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ToDoViewHolder(binding)
     }
 
@@ -29,7 +32,12 @@ class ToDoAdapter(private val itemList: List<ToDoData>): RecyclerView.Adapter<To
         val data = itemList[position]
 
         binding.ivCheck.setOnCheckedChangeListener { buttonView, isChecked ->
-            data.done = isChecked
+            data.isDone = isChecked
+            todo.changeIsDone(position)
         }
+    }
+
+    interface TodoInterface {
+        fun changeIsDone(position: Int)
     }
 }
