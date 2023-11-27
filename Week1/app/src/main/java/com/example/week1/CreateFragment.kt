@@ -1,17 +1,24 @@
 package com.example.week1
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
 import com.example.week1.databinding.FragmentCreateBinding
+import com.example.week1.db.Todo
+import com.example.week1.db.TodoViewModel
+import com.example.week1.db.TodoViewModelFactory
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
-class CreateFragment : Fragment() {
+class CreateFragment : BottomSheetDialogFragment() {
 
     private var _binding: FragmentCreateBinding? = null
     private val binding
         get() = requireNotNull(_binding) { "CreateFragment's binding is null" }
+
+    private lateinit var todoViewModel: TodoViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -21,8 +28,45 @@ class CreateFragment : Fragment() {
         return binding.root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        todoViewModel = ViewModelProvider(
+            requireActivity(), TodoViewModelFactory(
+                (requireActivity().application as Application).database
+                    .todoDao()
+            )
+        )[TodoViewModel::class.java]
+
+        binding.btnStore.setOnClickListener {
+            if (validateTodo(binding.etTodoContent.text.toString())) {
+                val newTodo = Todo(isDone = false, content = binding.etTodoContent.text.toString())
+                todoViewModel.insertTodo(newTodo)
+            }
+            dismiss()
+        }
+
+        binding.btnCancel.setOnClickListener {
+            dismiss()
+        }
+    }
+
+    private fun validateTodo(content: String): Boolean {
+        Log.d(
+            "로그",
+            "CreateFragment - validateTodo() called\nContent : ${content}\nLength : ${content.length}"
+        )
+        if (content.isBlank()) {
+            return false
+        }
+        return true
+    }
+
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+
+    companion object {
+        const val TAG = "CreateFragment - BottomSheet"
     }
 }

@@ -10,30 +10,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.example.week1.databinding.FragmentMyPageBinding
+import com.example.week1.db.Todo
+import com.example.week1.db.TodoViewModel
+import com.example.week1.db.TodoViewModelFactory
 import com.example.week1.db.UserViewModel
 import com.example.week1.db.UserViewModelFactory
 import com.example.week1.db.User
 import com.example.week1.utils.TAG
-import com.example.week1.viewModel.ToDoViewModel
 
 class MyPageFragment : Fragment() {
 
     private var _binding: FragmentMyPageBinding? = null
     private val binding
         get() = requireNotNull(_binding) { "MyPageFragment's binding is null" }
-    private val todoViewModel: ToDoViewModel by activityViewModels()
     private lateinit var userViewModel: UserViewModel
-    /*private val userViewModel: UserViewModel by activityViewModels() {
-        UserViewModelFactory(
-            (activity?.application as Application).database
-                .userDao()
-        )
-    }*/
+    private lateinit var todoViewModel: TodoViewModel
 
     private val startForResult = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -41,7 +36,11 @@ class MyPageFragment : Fragment() {
         if (result.resultCode == RESULT_OK) {
             val name = requireNotNull(result.data?.getStringExtra("nickname"))
             val imageUrl = requireNotNull(result.data?.getStringExtra("imageUrl"))
-            val user = User(uid= requireNotNull(userViewModel.currentUser.value).first().uid, name = name, imageUrl = imageUrl)
+            val user = User(
+                uid = requireNotNull(userViewModel.currentUser.value).first().uid,
+                name = name,
+                imageUrl = imageUrl
+            )
 
             if (userViewModel.isEntryValid(name, imageUrl)) {
                 userViewModel.updateUser(user)
@@ -60,10 +59,18 @@ class MyPageFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        userViewModel = ViewModelProvider(this, UserViewModelFactory(
-            (requireActivity().application as Application).database
-                .userDao()
-        ))[UserViewModel::class.java]
+        userViewModel = ViewModelProvider(
+            this, UserViewModelFactory(
+                (requireActivity().application as Application).database
+                    .userDao()
+            )
+        )[UserViewModel::class.java]
+        todoViewModel = ViewModelProvider(
+            requireActivity(), TodoViewModelFactory(
+                (requireActivity().application as Application).database
+                    .todoDao()
+            )
+        )[TodoViewModel::class.java]
 
         setObserver()
 
@@ -71,6 +78,10 @@ class MyPageFragment : Fragment() {
             val intent: Intent = Intent(requireContext(), EditActivity::class.java)
             intent.putExtra("nickname", binding.nicknameTv.text)
             intent.putExtra("email", binding.emailTv.text)
+            intent.putExtra(
+                "imageUrl",
+                requireNotNull(userViewModel.currentUser.value).first().imageUrl
+            )
             startForResult.launch(intent)
         }
     }
@@ -86,7 +97,7 @@ class MyPageFragment : Fragment() {
     private fun setObserver() {
         val usersObserver = Observer<List<User>> {
             if (it != null) {
-                Log.e(TAG ,it.toString())
+                Log.e(TAG, "MyPageFragment - setObserver()\nit = ${it}")
                 setProfile(it)
             } else {
                 // users가 null인 경우 처리 코드
@@ -95,10 +106,10 @@ class MyPageFragment : Fragment() {
         }
         userViewModel.currentUser.observe(viewLifecycleOwner, usersObserver)
 
-        val countObserver = Observer<List<ToDoData>> {
+        val countObserver = Observer<List<Todo>> {
             binding.tvTodoCount.text = "${todoViewModel.getDoneCount()} 개"
         }
-        todoViewModel.currentToDoList.observe(viewLifecycleOwner, countObserver)
+        todoViewModel.currentTodoList.observe(viewLifecycleOwner, countObserver)
     }
 
     override fun onDestroyView() {
