@@ -25,12 +25,7 @@ class EditActivity : AppCompatActivity() {
 
         var url: String? = null
 
-        intent.getStringExtra("nickname").also { name ->
-            binding.nicknameTv.text = name
-            binding.nicknameInputEt.setText(name)
-        }
-
-        binding.emailTv.text = intent.getStringExtra("email")
+        getIntentData(intent)
 
         binding.backIv.setOnClickListener {
             finish()
@@ -52,39 +47,62 @@ class EditActivity : AppCompatActivity() {
             finish()
         }
 
-         binding.nicknameInputEt.setOnFocusChangeListener { v, hasFocus ->
-             if(hasFocus) {
-                 binding.nicknameInputEt.setText("")
-             }
-         }
-
-        binding.profileImageInputBtn.setOnClickListener {
-            RetrofitUtil.unsplashService.requestRandomPhoto().enqueue(object : retrofit2.Callback<ResultPhotosRamdom> {
-                override fun onResponse(
-                    call: Call<ResultPhotosRamdom>,
-                    response: Response<ResultPhotosRamdom>
-                ) {
-                    if (response.isSuccessful) {
-                        Log.d(TAG, "EditActivity - onResponse() called: 성공")
-                        val body = requireNotNull(response.body()) { "Retrofit-requestRandomPhoto()'s result is null" }
-                        url = body.urls.url
-
-                        Glide.with(this@EditActivity)
-                            .load(url)
-                            .centerCrop()
-                            .into(binding.profileImageIv)
-
-                        return
-                    }
-                    Log.d(TAG, "EditActivity - onResponse() called: 실패")
-                }
-
-                override fun onFailure(call: Call<ResultPhotosRamdom>, t: Throwable) {
-                    Log.d(TAG, "EditActivity - onFailure() called")
-                }
-
-            })
+        binding.nicknameInputEt.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                binding.nicknameInputEt.setText("")
+            }
         }
 
+        binding.profileImageInputBtn.setOnClickListener {
+            RetrofitUtil.unsplashService.requestRandomPhoto()
+                .enqueue(object : retrofit2.Callback<ResultPhotosRamdom> {
+                    override fun onResponse(
+                        call: Call<ResultPhotosRamdom>,
+                        response: Response<ResultPhotosRamdom>
+                    ) {
+                        if (response.isSuccessful) {
+                            Log.d(TAG, "EditActivity - onResponse() called: 성공")
+                            val body =
+                                requireNotNull(response.body()) { "Retrofit-requestRandomPhoto()'s result is null" }
+                            url = body.urls.url
+
+                            Glide.with(this@EditActivity)
+                                .load(url)
+                                .centerCrop()
+                                .into(binding.profileImageIv)
+
+                            return
+                        }
+                        Log.d(TAG, "EditActivity - onResponse() called: 실패")
+                    }
+
+                    override fun onFailure(call: Call<ResultPhotosRamdom>, t: Throwable) {
+                        Log.d(TAG, "EditActivity - onFailure() called")
+                    }
+
+                })
+        }
+
+    }
+
+    private fun getIntentData(intent: Intent?) {
+
+        requireNotNull(intent) { "EditActivity's intent is null" }.also {
+            it.getStringExtra("nickname").also { name ->
+                binding.nicknameTv.text = name
+                binding.nicknameInputEt.setText(name)
+            }
+
+            it.getStringExtra("email").also { email ->
+                binding.emailTv.text = email
+            }
+
+            it.getStringExtra("imageUrl").also { imageUrl ->
+                Glide.with(this)
+                    .load(imageUrl)
+                    .centerCrop()
+                    .into(binding.profileImageIv)
+            }
+        }
     }
 }
